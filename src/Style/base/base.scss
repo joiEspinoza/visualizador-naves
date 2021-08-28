@@ -1,0 +1,31 @@
+html, body
+{
+    margin: 0;
+    min-width: 100vw;
+    min-height: 100vh;
+    background-color: black;
+    background-image: url('https://res.cloudinary.com/djlmqpd2n/image/upload/v1629947544/testSOAINT/back_oxxzqm.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-bottom: 1rem;
+}
+
+
+hr
+{
+    border: 1px solid black;
+}
+
+
+base__pNoMarg p
+{
+    margin: 0 !important;
+}
+
+
+.base__flexCenter
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
