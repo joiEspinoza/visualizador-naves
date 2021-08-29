@@ -21,6 +21,7 @@ const Main = () =>
     const dispatch = useDispatch();
     const { ships, activeShip } = useSelector( state => state.hangar );
     const [pilots, setPilots] = useState([])
+    const [load, setLoad] = useState(false)
     
     
     //Extracción Info
@@ -31,13 +32,29 @@ const Main = () =>
     //Carga Info
     useEffect(() => 
     {   
+    
         //Carga Naves
-        dispatch(startLoadShips())
+        dispatch(startLoadShips());
 
-       //Validación info urls 
+        //Carga pilotos
+        startLoadPilots();
+
+        
+    },[activeShip])
+
+
+    ///Inicia carga pilotos
+    const startLoadPilots = () =>
+    {
+       
+        onLoad();
+
+        //Validación info urls 
        if( pilotsUrl[0] )
        {
-           
+       
+        pilotsUrl[0].length <= 0 && offLoad();
+
         pilotsUrl[0].map( ( url ) => 
         {   
             ///Carga pilotos || Info demora un par de seg en cargar
@@ -46,12 +63,15 @@ const Main = () =>
             {
                 pilots.push(result)
                 setPilots(pilots)
-            })
-        })
+                offLoad();
+
+            });
+        
+        });
        
        };
-        
-    },[activeShip])
+
+    };
 
 
     //Custome Hook | Rescata info desde input
@@ -60,35 +80,34 @@ const Main = () =>
     const { shipName } = formValues;
     
     
-    //Cambia información activa
+    //Cambia información activa || Limpia informacion pilotos
     const handleInfo = () =>
     {
         dispatch( setActiveShip( shipName ) );   
-    };
-
-
-    //Limpia informacion pilotos
-    const handleResetPilots = () =>
-    {
         setPilots([]);
     };
 
 
+    //Manejador animación carga
+    const offLoad = () => setLoad(false);
+    const onLoad = () => setLoad(true);
 
+
+    
 /************************************************************************************************* */
 
 
     return (
        
-        <>
+        <div className="container">
             
             <div className="row">
                 
                 <div className="col-md-12 col-12 base__flexCenter mt-3">
 
-                    <select className="main__select" name="shipName" value={ shipName } onClick={ () => { handleResetPilots();handleInfo() } } onChange={ handleInputChange }>
+                    <select className="main__select" name="shipName" value={ shipName } onClick={ handleInfo } onChange={ handleInputChange }>
                         
-                        <option value={[]}>Seleccione una nave...</option>
+                        <option value={""}>Seleccione una nave...</option>
                         {
                             
                             ships.map( ( ship, index ) => 
@@ -138,7 +157,7 @@ const Main = () =>
 
                                         ?
                                         
-                                        info.cost_in_credits
+                                        info.cost_in_credits.toUpperCase()
 
                                         :
 
@@ -157,7 +176,7 @@ const Main = () =>
         
                                             ?
                                             
-                                            info.passengers
+                                            info.passengers.toUpperCase()
         
                                             :
         
@@ -188,14 +207,20 @@ const Main = () =>
                             
                             <hr/>
 
+                      
                             {   
+                            
                                 pilots.length > 0 ?
                                 pilots.sort().map( ( pilot, index ) => 
                                 {
                                     return <p key={index}>{pilot}</p>
                                 })  
                                 :
-                                "n/a"
+                                load ?
+                                <img className="main__load" src="https://res.cloudinary.com/djlmqpd2n/image/upload/v1630257200/testSOAINT/Dual_Ring-1s-200px_mablo4.svg" alt="load"/>
+                                : 
+                                "N/A"
+  
                             }
                         
                         </div>
@@ -207,7 +232,7 @@ const Main = () =>
                </>
             }
             
-        </> 
+        </div> 
            
     )
 }
