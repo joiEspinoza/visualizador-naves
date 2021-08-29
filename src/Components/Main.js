@@ -40,7 +40,7 @@ const Main = () =>
            
         pilotsUrl[0].map( ( url ) => 
         {   
-            ///Carga pilotos
+            ///Carga pilotos || Info demora un par de seg en cargar
             dispatch( loadPilots( url ) )
             .then( ( result ) => 
             {
@@ -189,10 +189,13 @@ const Main = () =>
                             <hr/>
 
                             {   
+                                pilots.length > 0 ?
                                 pilots.sort().map( ( pilot, index ) => 
                                 {
                                     return <p key={index}>{pilot}</p>
                                 })  
+                                :
+                                "n/a"
                             }
                         
                         </div>

@@ -5,11 +5,10 @@ import { types } from "../Type/types";
 
 
 //Manejador estado
-
 const initState =
 {
     ships : [],
-    activeShip : [],
+    activeShip : "",
 };
 
 
